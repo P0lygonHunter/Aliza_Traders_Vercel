@@ -52,13 +52,13 @@ export default function HomePage() {
 
       <section class="hero-section" id="hero-section">
         <div class="hero-media">
-          <img src="/static/img/hero-banner.png" alt="Aliza Traders Bridal and Party Wear" />
+          <img src="/static/img/hero-banner.png" alt="Aliza Traders Bridal & Party Wear" />
           <div class="hero-overlay"></div>
         </div>
         <div class="hero-content">
           <span class="hero-eyebrow">New Season Edit</span>
           <h1 class="hero-title">Woven With<br />Elegance</h1>
-          <p class="hero-sub">Hand-embroidered lehengas for every celebration - party nights, mehndi dholkis, and everything in between.</p>
+          <p class="hero-sub">Hand-embroidered lehengas for every celebration — party nights, mehndi dholkis, and everything in between.</p>
           <div class="hero-cta-row">
             <a href="#party-wear" class="btn btn-light">Shop Party Wear</a>
             <a href="#mehndi-wear" class="btn btn-outline-light">Shop Mehndi Wear</a>
@@ -109,7 +109,7 @@ export default function HomePage() {
         <section class="promo-banner">
           <div class="promo-inner">
             <span class="promo-eyebrow">Limited Time</span>
-            <h2>Function Season Sale - Up to 25% Off</h2>
+            <h2>Function Season Sale — Up to 25% Off</h2>
             <a href="#function-wear" class="btn btn-dark">Explore Offers</a>
           </div>
         </section>
@@ -157,7 +157,7 @@ export default function HomePage() {
       <section class="features-strip">
         <div class="feature-item">
           <i class="fa-solid fa-truck"></i>
-          <div><h4>Nationwide Delivery</h4><p>Karachi, Lahore, Islamabad and beyond</p></div>
+          <div><h4>Nationwide Delivery</h4><p>Karachi, Lahore, Islamabad &amp; beyond</p></div>
         </div>
         <div class="feature-item">
           <i class="fa-solid fa-money-bill-wave"></i>
@@ -177,11 +177,11 @@ export default function HomePage() {
         <div class="about-content">
           <span class="section-eyebrow">Our Story</span>
           <h2 class="section-title">Aliza Traders</h2>
-          <p>Aliza Traders is a Pakistan-based online boutique bringing hand-crafted party wear, function wear, mehndi wear and bridal lehengas straight to your doorstep.</p>
+          <p>Aliza Traders is a Pakistan-based online boutique bringing hand-crafted party wear, function wear, mehndi wear and bridal lehengas straight to your doorstep. Every piece is designed with rich fabrics, intricate embroidery and comfortable stitching — so you shine at every celebration, without the hassle of visiting a dozen shops.</p>
           <p>From glimmering sequin lehengas for your next wedding night to breezy mehndi shararas in festive yellows and greens, our collections are curated for the modern Pakistani bride and her entourage.</p>
           <div class="about-stats" id="aboutStats">
-            <div><strong id="statHappyCustomers">-</strong><span>Happy Customers</span></div>
-            <div><strong id="statUniqueDesigns">-</strong><span>Unique Designs</span></div>
+            <div><strong id="statHappyCustomers">—</strong><span>Happy Customers</span></div>
+            <div><strong id="statUniqueDesigns">—</strong><span>Unique Designs</span></div>
             <div><strong id="statHandcrafted">100%</strong><span>Handcrafted Detail</span></div>
           </div>
         </div>
@@ -190,7 +190,7 @@ export default function HomePage() {
       <section class="newsletter-section">
         <div class="newsletter-inner">
           <h3>Join The Aliza Traders Family</h3>
-          <p>Be the first to know about new arrivals, exclusive sales and wedding season drops.</p>
+          <p>Be the first to know about new arrivals, exclusive sales &amp; wedding season drops.</p>
           <form id="newsletterForm" class="newsletter-form">
             <input type="email" id="newsletterEmail" placeholder="Enter your email address" required />
             <button type="submit"><i class="fa-solid fa-paper-plane"></i> Subscribe</button>
@@ -204,12 +204,12 @@ export default function HomePage() {
           <div class="contact-info">
             <span class="section-eyebrow">Get In Touch</span>
             <h2 class="section-title">Contact Us</h2>
-            <p>Have a question about sizing, custom stitching, or an order? Reach out - we usually reply within a few hours.</p>
+            <p>Have a question about sizing, custom stitching, or an order? Reach out — we usually reply within a few hours.</p>
             <ul class="contact-list" id="contactList">
-              <li id="contactPhoneRow"><i class="fa-solid fa-phone"></i> <span>-</span></li>
-              <li id="contactWhatsapp"><i class="fa-brands fa-whatsapp"></i> <span>WhatsApp: -</span></li>
-              <li id="contactEmailRow"><i class="fa-solid fa-envelope"></i> <span>-</span></li>
-              <li id="contactAddress"><i class="fa-solid fa-location-dot"></i> <span>-</span></li>
+              <li id="contactPhoneRow"><i class="fa-solid fa-phone"></i> <span>—</span></li>
+              <li id="contactWhatsapp"><i class="fa-brands fa-whatsapp"></i> <span>WhatsApp: —</span></li>
+              <li id="contactEmailRow"><i class="fa-solid fa-envelope"></i> <span>—</span></li>
+              <li id="contactAddress"><i class="fa-solid fa-location-dot"></i> <span>—</span></li>
             </ul>
             <div class="social-row" id="socialRow">
               <a href="#" id="socialInstagram" aria-label="Instagram" style="display:none"><i class="fa-brands fa-instagram"></i></a>
@@ -235,7 +235,7 @@ export default function HomePage() {
               <span class="brand-crown"><i class="fa-solid fa-crown"></i></span>
               <span class="brand-text"><span class="brand-name">Aliza Traders</span></span>
             </a>
-            <p>Pakistan boutique for party wear, function wear, mehndi wear and bridal lehengas - delivered nationwide.</p>
+            <p>Pakistan's boutique for party wear, function wear, mehndi wear &amp; bridal lehengas — delivered nationwide.</p>
           </div>
           <div class="footer-col">
             <h4>Shop</h4>
@@ -315,7 +315,7 @@ export default function HomePage() {
           <div id="checkoutSuccess" style="display:none" class="checkout-success">
             <i class="fa-solid fa-circle-check"></i>
             <h4>Order Placed Successfully!</h4>
-            <p>Your order number is <strong id="successOrderNumber"></strong>. We will contact you shortly to confirm delivery details.</p>
+            <p>Your order number is <strong id="successOrderNumber"></strong>. We'll contact you shortly to confirm delivery details.</p>
             <button class="btn btn-outline" id="successCloseBtn">Continue Shopping</button>
           </div>
         </div>
