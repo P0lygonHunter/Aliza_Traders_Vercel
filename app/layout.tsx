@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import type { ReactNode } from 'react'
 
 export const metadata: Metadata = {
   title: 'Aliza Traders | Party, Function & Mehndi Wear Lehengas',
@@ -6,7 +7,7 @@ export const metadata: Metadata = {
     "Aliza Traders — Pakistan's online boutique for party wear, function wear, mehndi wear and bridal luxe lehengas. Nationwide delivery."
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
