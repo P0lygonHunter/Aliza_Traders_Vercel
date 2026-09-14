@@ -1,1 +1,1 @@
-PLACEHOLDER_ADMIN
+/* see artifact - loading full content via parallel */
