@@ -67,7 +67,13 @@
   // or a gradient placeholder tile if no photo has been uploaded yet.
   function mediaHTML(imagePrimary, categorySlug, iconSize) {
     const sizeAttr = iconSize ? `style="font-size:${iconSize}"` : '';
-    if (imagePrimary && imagePrimary.startsWith('/api/images/')) {
+    if (
+      imagePrimary &&
+      (imagePrimary.startsWith('/api/images/') ||
+        imagePrimary.startsWith('http://') ||
+        imagePrimary.startsWith('https://') ||
+        imagePrimary.startsWith('data:'))
+    ) {
       return `<img src="${imagePrimary}" alt="" loading="lazy" />`;
     }
     const gradClass = imagePrimary || 'grad-maroon';
@@ -159,7 +165,13 @@
     const hasDiscount = !!p.sale_price;
     const modal = document.getElementById('productModal');
     const imgUrl = p.image_primary;
-    const isRealImage = !!(imgUrl && imgUrl.startsWith('/api/images/'));
+    const isRealImage = !!(
+      imgUrl &&
+      (imgUrl.startsWith('/api/images/') ||
+        imgUrl.startsWith('http://') ||
+        imgUrl.startsWith('https://') ||
+        imgUrl.startsWith('data:'))
+    );
 
     const sizesHtml = (p.sizes || []).map(s =>
       `<span class="option-pill ${s === qvState.size ? 'selected' : ''}" data-type="size" data-value="${s}">${s}</span>`
@@ -709,7 +721,7 @@
         el.innerHTML = iconHtml + ' <span>' + text + '</span>';
       };
 
-      setContact('contactPhone', '<i class="fa-solid fa-phone"></i>', s.phone);
+      setContact('contactPhoneRow', '<i class="fa-solid fa-phone"></i>', s.phone);
       setContact('contactWhatsapp', '<i class="fa-brands fa-whatsapp"></i>', s.whatsapp ? ('WhatsApp: ' + s.whatsapp) : '');
       setContact('contactEmail', '<i class="fa-solid fa-envelope"></i>', s.email);
       setContact('contactAddress', '<i class="fa-solid fa-location-dot"></i>', s.address);
