@@ -769,7 +769,12 @@
   }
 
   // ---------------- Init ----------------
-  document.addEventListener('DOMContentLoaded', checkSession);
+  // Next.js loads this script after DOMContentLoaded may already have fired
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', checkSession);
+  } else {
+    checkSession();
+  }
 
   window.AdminApp = { editProduct, deleteProduct, viewOrder };
 })();

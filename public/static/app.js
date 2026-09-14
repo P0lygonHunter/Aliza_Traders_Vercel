@@ -754,7 +754,11 @@
     loadSettings();
   }
 
-  document.addEventListener('DOMContentLoaded', init);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 
   // Expose public API for inline onclick handlers
   window.AlizaStore = {
