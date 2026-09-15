@@ -22,6 +22,14 @@ export async function GET() {
     const realOrders = Number((orderCount[0] as any)?.n || 0)
     const mode = map.stats_mode || 'auto'
 
+    let heroImages: string[] = []
+    try {
+      heroImages = map.hero_images ? JSON.parse(map.hero_images) : []
+      if (!Array.isArray(heroImages)) heroImages = []
+    } catch {
+      heroImages = []
+    }
+
     let happyCustomers: string
     let uniqueDesigns: string
     let handcrafted: string
@@ -58,6 +66,7 @@ export async function GET() {
         happy_customers: happyCustomers,
         unique_designs: uniqueDesigns,
         handcrafted,
+        hero_images: heroImages,
         _real: { products: realProducts, customers: realCustomers, orders: realOrders }
       }
     })

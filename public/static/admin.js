@@ -11,7 +11,8 @@
     categories: [],
     products: [],
     orders: [],
-    productForm: { colors: [], sizes: [], image_key: null, image_url: null }
+    productForm: { colors: [], sizes: [], image_key: null, image_url: null },
+    heroImages: []
   };
 
   function fmtPrice(n) {
@@ -282,13 +283,18 @@
         <h3>${isEdit ? 'Edit Product' : 'Add New Product'}</h3>
         <form id="productForm" class="form-grid">
           <div class="form-group full">
-            <label>Product Image URL</label>
-            <input type="url" id="fImageUrl" placeholder="https://i.ibb.co/your-image.jpg" value="${esc(
+            <label>Product Image</label>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <input type="file" id="fImageFile" accept="image/jpeg,image/png,image/webp,image/gif" style="max-width:260px" />
+              <span style="font-size:0.82rem;color:#6b5a5e">or paste a URL below</span>
+            </div>
+            <div id="uploadStatus" style="font-size:0.82rem;margin-top:4px"></div>
+            <input type="url" id="fImageUrl" placeholder="https://..." style="margin-top:8px" value="${esc(
               (product?.image_primary && (String(product.image_primary).startsWith('http') || String(product.image_primary).startsWith('data:')))
                 ? product.image_primary
                 : ''
             )}" />
-            <span class="form-hint">Paste public image link (free upload: imgbb.com). Leave empty for color placeholder.</span>
+            <span class="form-hint">Upload a file (recommended) or paste an existing image URL. Leave both empty for color placeholder.</span>
             <div class="image-preview" id="imagePreview" style="margin-top:10px"></div>
           </div>
 
@@ -385,6 +391,32 @@
           state.productForm.image_gradient = 'grad-maroon';
         }
         renderImagePreview();
+      });
+    }
+
+    const imgFileInput = document.getElementById('fImageFile');
+    if (imgFileInput) {
+      imgFileInput.addEventListener('change', async () => {
+        const file = imgFileInput.files && imgFileInput.files[0];
+        if (!file) return;
+        const statusEl = document.getElementById('uploadStatus');
+        statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+        try {
+          const fd = new FormData();
+          fd.append('file', file);
+          const r = await api('/upload-image', { method: 'POST', body: fd });
+          if (r.success && r.url) {
+            state.productForm.image_key = r.url;
+            state.productForm.image_gradient = null;
+            if (imgUrlInput) imgUrlInput.value = r.url;
+            statusEl.innerHTML = '<span style="color:#2f7a4f"><i class="fa-solid fa-circle-check"></i> Uploaded</span>';
+            renderImagePreview();
+          } else {
+            statusEl.innerHTML = '<span style="color:#b23b3b">' + esc(r.error || 'Upload failed') + '</span>';
+          }
+        } catch (err) {
+          statusEl.innerHTML = '<span style="color:#b23b3b">Network error during upload</span>';
+        }
       });
     }
 
@@ -675,6 +707,7 @@
     const res = await api('/settings');
     const s = res.data || {};
     const live = s._live || { products: 0, customers: 0 };
+    state.heroImages = Array.isArray(s.hero_images) ? [...s.hero_images] : [];
 
     panel.innerHTML = `
       <div class="panel-header">
@@ -685,6 +718,16 @@
       </div>
 
       <form id="settingsForm">
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-head"><h3>Hero Background Slideshow</h3></div>
+          <div style="padding:16px">
+            <p style="font-size:0.85rem;color:#6b5a5e;margin-bottom:14px">
+              Upload 2–4 images. They auto-rotate on the homepage background every ~5.5 seconds. Recommended size: 1920×1080px or wider, landscape.
+            </p>
+            <div id="heroSlotsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;max-width:760px"></div>
+          </div>
+        </div>
+
         <div class="card" style="margin-bottom:20px">
           <div class="card-head"><h3>Contact Information</h3></div>
           <div style="padding:16px;display:grid;gap:14px;max-width:560px">
@@ -771,6 +814,8 @@
       </form>
     `;
 
+    renderHeroSlots();
+
     document.getElementById('settingsForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.target;
@@ -780,6 +825,7 @@
 
       const payload = {};
       new FormData(form).forEach((val, key) => { payload[key] = val; });
+      payload.hero_images = JSON.stringify(state.heroImages);
 
       try {
         const r = await api('/settings', { method: 'PUT', body: JSON.stringify(payload) });
@@ -794,6 +840,71 @@
       btn.disabled = false;
       btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Settings';
     });
+  }
+
+  // ---------------- Hero Slideshow Slots ----------------
+  const MAX_HERO_IMAGES = 4;
+
+  function renderHeroSlots() {
+    const grid = document.getElementById('heroSlotsGrid');
+    if (!grid) return;
+
+    const slotsHtml = [];
+    state.heroImages.forEach((url, i) => {
+      slotsHtml.push(`
+        <div class="hero-slot" style="position:relative;border-radius:8px;overflow:hidden;aspect-ratio:16/10;border:1px solid #e6dcd0">
+          <img src="${esc(url)}" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <button type="button" class="hero-slot-remove" data-idx="${i}" style="position:absolute;top:6px;right:6px;background:rgba(20,10,12,0.7);color:#fff;border:none;border-radius:50%;width:26px;height:26px;cursor:pointer">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          <span style="position:absolute;bottom:4px;left:6px;background:rgba(20,10,12,0.6);color:#fff;font-size:0.7rem;padding:2px 6px;border-radius:4px">Slide ${i + 1}</span>
+        </div>
+      `);
+    });
+
+    if (state.heroImages.length < MAX_HERO_IMAGES) {
+      slotsHtml.push(`
+        <label class="hero-slot-add" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;aspect-ratio:16/10;border:2px dashed #d8c9ba;border-radius:8px;cursor:pointer;color:#8a6d55;font-size:0.82rem">
+          <i class="fa-solid fa-plus" style="font-size:1.2rem"></i>
+          Add Image
+          <input type="file" id="heroSlotFileInput" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none" />
+        </label>
+      `);
+    }
+
+    grid.innerHTML = slotsHtml.join('');
+
+    grid.querySelectorAll('.hero-slot-remove').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.getAttribute('data-idx'), 10);
+        state.heroImages.splice(idx, 1);
+        renderHeroSlots();
+      });
+    });
+
+    const addInput = document.getElementById('heroSlotFileInput');
+    if (addInput) {
+      addInput.addEventListener('change', async () => {
+        const file = addInput.files && addInput.files[0];
+        if (!file) return;
+        const label = addInput.closest('.hero-slot-add');
+        label.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading...';
+        try {
+          const fd = new FormData();
+          fd.append('file', file);
+          const r = await api('/upload-image', { method: 'POST', body: fd });
+          if (r.success && r.url) {
+            state.heroImages.push(r.url);
+            showToast('Hero image uploaded — click Save Settings to publish');
+          } else {
+            showToast(r.error || 'Upload failed', true);
+          }
+        } catch (err) {
+          showToast('Network error during upload', true);
+        }
+        renderHeroSlots();
+      });
+    }
   }
 
   // ---------------- Init ----------------

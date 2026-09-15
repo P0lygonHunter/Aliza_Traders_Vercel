@@ -754,9 +754,48 @@
       setSocial('socialInstagram', s.instagram_url);
       setSocial('socialFacebook', s.facebook_url);
       setSocial('socialTiktok', s.tiktok_url);
+
+      initHeroSlideshow(s.hero_images);
     } catch (e) {
       console.warn('Settings load failed', e);
     }
+  }
+
+  // ---------------- Hero Background Slideshow ----------------
+  let heroSlideTimer = null;
+
+  function initHeroSlideshow(heroImages) {
+    const media = document.querySelector('.hero-media');
+    if (!media || !Array.isArray(heroImages) || heroImages.length === 0) return;
+
+    const overlay = media.querySelector('.hero-overlay');
+
+    // Remove the static fallback image(s), keep the overlay div
+    media.querySelectorAll('img').forEach((img) => img.remove());
+
+    const slides = heroImages.map((url, i) => {
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = 'Aliza Traders';
+      img.className = 'hero-slide' + (i === 0 ? ' active' : '');
+      if (overlay) {
+        media.insertBefore(img, overlay);
+      } else {
+        media.appendChild(img);
+      }
+      return img;
+    });
+
+    if (heroSlideTimer) clearInterval(heroSlideTimer);
+    if (slides.length < 2) return;
+
+    let idx = 0;
+    heroSlideTimer = setInterval(() => {
+      const next = (idx + 1) % slides.length;
+      slides[idx].classList.remove('active');
+      slides[next].classList.add('active');
+      idx = next;
+    }, 5500);
   }
 
   function init() {

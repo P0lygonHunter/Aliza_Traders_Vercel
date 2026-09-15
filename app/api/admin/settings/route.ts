@@ -20,6 +20,14 @@ export async function GET(req: NextRequest) {
       WHERE phone IS NOT NULL AND phone != ''
     `
 
+    let heroImages: string[] = []
+    try {
+      heroImages = map.hero_images ? JSON.parse(map.hero_images) : []
+      if (!Array.isArray(heroImages)) heroImages = []
+    } catch {
+      heroImages = []
+    }
+
     return NextResponse.json({
       success: true,
       data: {
@@ -36,6 +44,7 @@ export async function GET(req: NextRequest) {
         happy_customers_display: map.happy_customers_display || '500+',
         unique_designs_display: map.unique_designs_display || '50+',
         handcrafted_display: map.handcrafted_display || '100%',
+        hero_images: heroImages,
         _live: {
           products: Number((productCount[0] as any)?.n || 0),
           customers: Number((customerCount[0] as any)?.n || 0)
@@ -59,7 +68,8 @@ export async function PUT(req: NextRequest) {
       'instagram_url', 'facebook_url', 'tiktok_url',
       'announce_bar_text', 'free_delivery_text',
       'stats_mode', 'happy_customers_display',
-      'unique_designs_display', 'handcrafted_display'
+      'unique_designs_display', 'handcrafted_display',
+      'hero_images'
     ]
     for (const key of allowed) {
       if (body[key] !== undefined) {
